@@ -143,7 +143,7 @@ DROP TABLE country_codes;
 
 ---------------------------- CREATING PRIMARY AND FOREIGN KEYS ----------------------------
 
--- 1. do olympic tables need a primary key?
+-- 1. Olympic tables do not need primary key since nothing is being joined to them
 
 -- 2. country_info has a primary key on country_code
 
@@ -297,3 +297,6 @@ ALTER TABLE winter_olympics ADD FOREIGN KEY (country) REFERENCES country_info(co
 ALTER TABLE summer_olympics ADD FOREIGN KEY (country) REFERENCES country_info(country_code);
 
 ALTER TABLE country_incomes ADD FOREIGN KEY (country_code) REFERENCES country_info(country_code);
+
+
+
