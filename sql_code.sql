@@ -320,5 +320,5 @@ COPY(
   HAVING income_group IS NOT NULL
   ORDER BY income_group 
 )
-TO '/Users/alexweirth/Documents/data_351/final_project/winter_vis.csv'
+TO '/Users/alexweirth/Documents/data_351/final_project/summer_vis.csv'
 WITH(FORMAT CSV, HEADER);
