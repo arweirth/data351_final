@@ -299,4 +299,26 @@ ALTER TABLE summer_olympics ADD FOREIGN KEY (country) REFERENCES country_info(co
 ALTER TABLE country_incomes ADD FOREIGN KEY (country_code) REFERENCES country_info(country_code);
 
 
+--- winter olympics vis table
+COPY(
+  SELECT wi.country, wi.medal, ci.pop_2014 AS population, ci.gdp_per_capita_2014 AS gdp
+  FROM winter_olympics AS wi
+  JOIN country_info AS ci ON ci.country_code = wi.country
+  WHERE wi.year = 2014
+  ORDER BY country
+)
+TO '/Users/alexweirth/Documents/data_351/final_project/winter_vis.csv'
+WITH(FORMAT CSV, HEADER);
 
+-- summer olympics vis
+COPY(
+  SELECT cinc.income_group, sm.medal, COUNT(*) AS medal_count
+  FROM summer_olympics AS sm
+  JOIN country_info AS ci ON ci.country_code = sm.country
+  JOIN country_incomes AS cinc ON cinc.country_code = ci.country_code
+  GROUP BY income_group, medal
+  HAVING income_group IS NOT NULL
+  ORDER BY income_group 
+)
+TO '/Users/alexweirth/Documents/data_351/final_project/winter_vis.csv'
+WITH(FORMAT CSV, HEADER);
