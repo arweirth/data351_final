@@ -299,6 +299,7 @@ ALTER TABLE summer_olympics ADD FOREIGN KEY (country) REFERENCES country_info(co
 ALTER TABLE country_incomes ADD FOREIGN KEY (country_code) REFERENCES country_info(country_code);
 
 
+-- Query #2
 --- winter olympics vis table exported and saved to github as "winter_vis.csv"
 COPY(
   SELECT wi.country, wi.medal, ci.pop_2014 AS population, ci.gdp_per_capita_2014 AS gdp
@@ -310,6 +311,7 @@ COPY(
 TO '/Users/alexweirth/Documents/data_351/final_project/winter_vis.csv'
 WITH(FORMAT CSV, HEADER);
 
+-- Query #2
 -- creating a table for frequency distribution of medals for different categorical income brackets, exported and uploaded to github as "medal_dist.csv"
 CREATE TABLE gold_medals AS(
   SELECT cinc.income_group, COUNT(*) AS gold_count
