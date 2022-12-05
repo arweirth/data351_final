@@ -143,9 +143,12 @@ DROP TABLE country_codes;
 
 ---------------------------- CREATING PRIMARY AND FOREIGN KEYS ----------------------------
 
--- 1. olympic tables primary keys
-ALTER TABLE winter_olympics ADD PRIMARY KEY (year, sport, athlete, event);
-ALTER TABLE summer_olympics ADD PRIMARY KEY (year, sport, athlete, event);
+-- 1. olympic tables primary keys - we will add a serial column and then add primary keys to the table on that column
+ALTER TABLE summer_olympics ADD COLUMN id SERIAL;
+ALTER TABLE summer_olympics ADD PRIMARY KEY (id);
+
+ALTER TABLE winter_olympics ADD COLUMN id SERIAL;
+ALTER TABLE winter_olympics ADD PRIMARY KEY (id);
 
 -- 2. country_info has a primary key on country_code
 
