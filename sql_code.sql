@@ -299,7 +299,7 @@ ALTER TABLE summer_olympics ADD FOREIGN KEY (country) REFERENCES country_info(co
 ALTER TABLE country_incomes ADD FOREIGN KEY (country_code) REFERENCES country_info(country_code);
 
 
---- winter olympics vis table
+--- winter olympics vis table exported and saved to github as "winter_vis.csv"
 COPY(
   SELECT wi.country, wi.medal, ci.pop_2014 AS population, ci.gdp_per_capita_2014 AS gdp
   FROM winter_olympics AS wi
@@ -310,15 +310,44 @@ COPY(
 TO '/Users/alexweirth/Documents/data_351/final_project/winter_vis.csv'
 WITH(FORMAT CSV, HEADER);
 
--- summer olympics vis
-COPY(
-  SELECT cinc.income_group, sm.medal, COUNT(*) AS medal_count
+-- creating a table for frequency distribution of medals for different categorical income brackets, exported and uploaded to github as "medal_dist.csv"
+CREATE TABLE gold_medals AS(
+  SELECT cinc.income_group, COUNT(*) AS gold_count
   FROM summer_olympics AS sm
   JOIN country_info AS ci ON ci.country_code = sm.country
   JOIN country_incomes AS cinc ON cinc.country_code = ci.country_code
   GROUP BY income_group, medal
-  HAVING income_group IS NOT NULL
-  ORDER BY income_group 
+  HAVING income_group IS NOT NULL AND medal = 'Gold'
+  ORDER BY income_group
+);
+
+CREATE TABLE silver_medals AS(
+  SELECT cinc.income_group, COUNT(*) AS silver_count
+  FROM summer_olympics AS sm
+  JOIN country_info AS ci ON ci.country_code = sm.country
+  JOIN country_incomes AS cinc ON cinc.country_code = ci.country_code
+  GROUP BY income_group, medal
+  HAVING income_group IS NOT NULL AND medal = 'Silver'
+  ORDER BY income_group
+);
+
+CREATE TABLE bronze_medals AS(
+  SELECT cinc.income_group, COUNT(*) AS bronze_count
+  FROM summer_olympics AS sm
+  JOIN country_info AS ci ON ci.country_code = sm.country
+  JOIN country_incomes AS cinc ON cinc.country_code = ci.country_code
+  GROUP BY income_group, medal
+  HAVING income_group IS NOT NULL AND medal = 'Bronze'
+  ORDER BY income_group
+);
+
+COPY(
+  SELECT g.income_group, g.gold_count, s.silver_count, b.bronze_count
+  FROM gold_medals AS g
+  JOIN silver_medals AS s on s.income_group = g.income_group
+  JOIN bronze_medals AS b on b.income_group = g.income_group
+  ORDER BY gold_count DESC
 )
-TO '/Users/alexweirth/Documents/data_351/final_project/summer_vis.csv'
+TO '/Users/alexweirth/Documents/data_351/final_project/medal_dist.csv'
 WITH(FORMAT CSV, HEADER);
+
